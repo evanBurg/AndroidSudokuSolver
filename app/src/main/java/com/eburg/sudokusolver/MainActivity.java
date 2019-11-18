@@ -90,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     lastResults = new ImageResults(characters, resultText);
+                    ArrayList<ArrayList<Integer>> test = lastResults.get2DArray();
+                    output.setText(resultText);
+
                     //Calc
                 })
                 .addOnFailureListener(exception -> {

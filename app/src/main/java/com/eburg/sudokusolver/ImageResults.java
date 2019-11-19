@@ -60,10 +60,17 @@ public class ImageResults {
         ArrayList<ArrayList<Integer>> board = new ArrayList<>();
         for(int i = 0; i < 9; i++){
             board.add(new ArrayList<>());
+            board.get(i).addAll(Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0));
         }
 
-        //Find bounding box
+        //Get avg width
+        float maxRight = 0, maxLeft = 0, maxTop = 0, maxBottom = 0;
         for (Result character : characters) {
+            maxLeft += character.boundingBox.left;
+            maxRight += character.boundingBox.right;
+            maxTop += character.boundingBox.top;
+            maxBottom += character.boundingBox.bottom;
+
             if(character.boundingBox.top < top){
                 top = character.boundingBox.top;
             }
@@ -79,6 +86,19 @@ public class ImageResults {
             if(character.boundingBox.top > right){
                 right = character.boundingBox.right;
             }
+        }
+
+        float avgWidth = ((maxRight / characters.size()) - (maxLeft / characters.size()));
+        float avgHeight = ((maxBottom / characters.size()) - (maxTop / characters.size()));
+
+        int insertedIntoCurrentRow = 0, currentRow = 0;
+        for (Result character : characters) {
+            int boxesFromLeft = (int) Math.floor((character.boundingBox.left - left) / avgWidth);
+            for(int i = 0; i < boxesFromLeft; i++){
+                board.get(currentRow).set(i, 0);
+                insertedIntoCurrentRow++;
+            }
+            board.get(currentRow).set(insertedIntoCurrentRow, Integer.parseInt(character.text));
         }
 
         return board;

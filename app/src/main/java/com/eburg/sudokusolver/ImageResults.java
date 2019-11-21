@@ -64,6 +64,13 @@ public class ImageResults implements Serializable {
             board.get(i).addAll(Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0));
         }
         for (Result character : characters) {
+
+            try{
+                Integer.parseInt(character.text);
+            }catch (Exception e){
+                continue;
+            }
+
             if(character.boundingBox.bottom > bottom){
                 bottom = character.boundingBox.top;
             }
@@ -73,6 +80,12 @@ public class ImageResults implements Serializable {
             }
         }
         for (Result character : characters) {
+            try{
+                Integer.parseInt(character.text);
+            }catch (Exception e){
+                continue;
+            }
+
             int boxesFromLeft = (int) Math.floor(Math.floor(character.boundingBox.right) / (right / 9));
             int boxesFromTop =  (int) Math.floor(Math.floor(character.boundingBox.top) / (bottom / 9));
 

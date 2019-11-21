@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                     String boardString = "";
                     for(ArrayList<Integer> row : board){
                         for(Integer num : row){
-                            boardString += num + "\t";
+                            boardString += num + "\t\t";
                         }
                         boardString += "\n";
                     }

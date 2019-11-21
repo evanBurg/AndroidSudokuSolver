@@ -3,4 +3,8 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="ucrop_color_toolbar">#008577</color>
+    <color name="ucrop_color_statusbar">#008577</color>
+    <color name="ucrop_color_widget_active">#008577</color>
 </resources>
+

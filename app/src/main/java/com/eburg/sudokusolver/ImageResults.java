@@ -73,8 +73,8 @@ public class ImageResults implements Serializable {
             }
         }
         for (Result character : characters) {
-            int boxesFromLeft = (int) Math.floor(character.boundingBox.right / (right / 9));
-            int boxesFromTop =  (int) Math.floor(character.boundingBox.top / (bottom / 9));
+            int boxesFromLeft = (int) Math.floor(Math.floor(character.boundingBox.right) / (right / 9));
+            int boxesFromTop =  (int) Math.floor(Math.floor(character.boundingBox.top) / (bottom / 9));
 
             board.get(boxesFromTop >= 9 ? 8 : boxesFromTop).set(boxesFromLeft >= 9 ? 8 : boxesFromLeft, Integer.parseInt(character.text));
         }

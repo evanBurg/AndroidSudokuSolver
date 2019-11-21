@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private Bitmap LOADED_IMAGE = null;
     private TextView output;
     private ImageResults lastResults = null;
+    private ImageView showImage;
+    private Button loadImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         setContentView(R.layout.activity_main);
         output = findViewById(R.id.text);
+        showImage = findViewById(R.id.imageView);
+        loadImage = findViewById(R.id.loadImageButton);
+        showImage.setVisibility(View.INVISIBLE);
     }
 
     /*
@@ -90,8 +97,18 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     lastResults = new ImageResults(characters, resultText);
-                    ArrayList<ArrayList<Integer>> test = lastResults.get2DArray();
-                    output.setText(resultText);
+                    ArrayList<ArrayList<Integer>> board = lastResults.get2DArray();
+                    String boardString = "";
+                    for(ArrayList<Integer> row : board){
+                        for(Integer num : row){
+                            boardString += num + "\t";
+                        }
+                        boardString += "\n";
+                    }
+                    output.setText(boardString);
+                    showImage.setImageBitmap(LOADED_IMAGE);
+                    showImage.setVisibility(View.VISIBLE);
+                    loadImage.setVisibility(View.INVISIBLE);
 
                     //Calc
                 })

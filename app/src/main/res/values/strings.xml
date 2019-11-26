@@ -8,5 +8,9 @@
     <string name="solve">Start Solving</string>
     <string name="back">Go back</string>
     <string name="loadedimage">Loaded Image</string>
-    <string name="correctthis">Correct This</string>
+    <string name="correctthis">Is this correct?</string>
+    <string name="showImage">Show Image</string>
+    <string name="hideImage">"Hide Image   "</string>
+    <string name="correctThisSpotlight">Type inside of this Sudoku Board to correct our parsed values.</string>
+    <string name="solvePuzzle">Solve Puzzle!</string>
 </resources>

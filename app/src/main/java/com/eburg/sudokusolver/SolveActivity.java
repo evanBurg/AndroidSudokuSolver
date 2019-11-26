@@ -7,9 +7,14 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,21 +37,44 @@ public class SolveActivity extends AppCompatActivity {
     private TextView output;
     private ImageResults lastResults = null;
     private ImageView showImage;
-    private Button loadImage;
+    private LinearLayout inputBoardContainer;
+    private ArrayList<ArrayList<EditText>> inputBoard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.solve_activity);
         output = findViewById(R.id.outputBoard);
         showImage = findViewById(R.id.providedImage);
+        inputBoardContainer = findViewById(R.id.inputBoardContainer);
+        inputBoard = new ArrayList<>();
         ImagePicker.Companion.with(this).crop().start(GET_FROM_GALLERY);
+
+        for(int i = 0; i < 9; i++){
+            LinearLayout row = new LinearLayout(this);
+            inputBoard.add(new ArrayList<EditText>());
+            for(int j = 0; j < 9; j++){
+                EditText text = new EditText(this);
+                text.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
+                text.setInputType(InputType.TYPE_CLASS_NUMBER);
+                text.setGravity(Gravity.CENTER_HORIZONTAL);
+                int maxLength = 3;
+                text.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
+                row.addView(text);
+                inputBoard.get(i).add(text);
+            }
+            inputBoardContainer.addView(row);
+        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    public void goBack(View v){
+        this.onBackPressed();
     }
 
     /*
@@ -93,38 +121,28 @@ public class SolveActivity extends AppCompatActivity {
 
                     lastResults = new ImageResults(characters, resultText);
                     ArrayList<ArrayList<Integer>> board = lastResults.get2DArray();
-                    String boardString = "╔═══╤═══╤═══╦═══╤═══╤═══╦═══╤═══╤═══╗\n";
+                    String boardString = "";
                     for(int i = 0; i < board.size(); i++){
                         ArrayList<Integer> row = board.get(i);
                         for(int j = 0; j < row.size(); j++){
-                            if(j == 0){
-                                boardString += "║    ";
-                            }
-
                             Integer num = row.get(j);
                             boardString += num + "    ";
 
-                            if(j % 2 == 0 && j != 0){
-                                boardString += "║    ";
-                            }else{
-                                boardString += "│    ";
+                            try{
+                               inputBoard.get(i).get(j).setText(String.valueOf(num));
+                            }catch (Exception e){
+                                String what = e.getMessage();
+                                String className = e.toString();
                             }
 
-                            if(j == 8){
-                                boardString += "║";
-                            }
                         }
-                        if(i == 8){
-                            boardString += "╚═══╧═══╧═══╩═══╧═══╧═══╩═══╧═══╧═══╝";
-                        }else{
-                            boardString += "───┼───┼───╫───┼───┼───╫───┼───┼───╢\n";
-                        }
+                        boardString += "\n";
                     }
 
                     output.setText(boardString);
                     showImage.setImageBitmap(LOADED_IMAGE);
                     showImage.setVisibility(View.VISIBLE);
-                    loadImage.setVisibility(View.INVISIBLE);
+                    showImage.setAdjustViewBounds(true);
 
                     //Calc
                 })

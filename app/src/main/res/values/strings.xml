@@ -6,4 +6,7 @@
     <string name="select">Select Image</string>
     <string name="history">Previous Puzzles</string>
     <string name="solve">Start Solving</string>
+    <string name="back">Go back</string>
+    <string name="loadedimage">Loaded Image</string>
+    <string name="correctthis">Correct This</string>
 </resources>

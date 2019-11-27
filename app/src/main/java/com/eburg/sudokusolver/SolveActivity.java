@@ -1,5 +1,6 @@
 package com.eburg.sudokusolver;
 
+import android.animation.LayoutTransition;
 import android.animation.TimeInterpolator;
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputFilter;
@@ -72,7 +74,6 @@ public class SolveActivity extends AppCompatActivity {
     private static final int BOARD_END = 9;
     private static final int originalDimension = 0;
     private static final int newDimension = LinearLayout.LayoutParams.WRAP_CONTENT;
-    private Target spotlightTarget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +88,9 @@ public class SolveActivity extends AppCompatActivity {
         inputBoardContainer = findViewById(R.id.inputBoardContainer);
         parseContainer = findViewById(R.id.parseContainer);
         parseContainer.setVisibility(View.INVISIBLE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            parseContainer.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+        }
         loader = findViewById(R.id.loader);
         inputBoard = new ArrayList<>();
         cardView = findViewById(R.id.imageContainer);

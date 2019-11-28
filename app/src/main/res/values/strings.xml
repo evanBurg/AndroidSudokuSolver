@@ -13,4 +13,5 @@
     <string name="hideImage">"Hide Image   "</string>
     <string name="correctThisSpotlight">Type inside of this Sudoku Board to correct our parsed values.</string>
     <string name="solvePuzzle">Solve Puzzle!</string>
+    <string name="clear">Clear All</string>
 </resources>

@@ -8,7 +8,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import static com.eburg.sudokusolver.Utilities.bitmapToBytes;
 import static com.eburg.sudokusolver.Utilities.bytesToBitmap;
@@ -25,12 +30,13 @@ public class DBAdapter {
     static final String KEY_PROBLEM = "problem";
     static final String KEY_SOLUTION = "solution";
     static final String KEY_IMAGE = "image";
+    static final String KEY_DATE = "date";
 
     static final String TAG = "SudokuSolverDatabase";
 
     static final String DATABASE_NAME = "SudokuSolver";
     static final String DATABASE_TABLE = "previouspuzzles";
-    static final int DATABASE_VERSION = 1;
+    static final int DATABASE_VERSION = 4;
 
     ArrayList<Listener> listeners;
 
@@ -40,12 +46,14 @@ public class DBAdapter {
                     "%s TEXT not null," +
                     "%s TEXT not null," +
                     "%s BLOB not null," +
+                    "%s TEXT not null" +
                     ")",
             DATABASE_TABLE,
             KEY_ROWID,
             KEY_PROBLEM,
             KEY_SOLUTION,
-            KEY_IMAGE
+            KEY_IMAGE,
+            KEY_DATE
     );
 
     final Context context;
@@ -56,6 +64,7 @@ public class DBAdapter {
     public DBAdapter(Context ctx)
     {
         this.context = ctx;
+        listeners = new ArrayList<>();
         DBHelper = new DatabaseHelper(context);
     }
 
@@ -81,7 +90,7 @@ public class DBAdapter {
         {
             Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                     + newVersion + ", which will destroy all old data");
-            db.execSQL("DROP TABLE IF EXISTS pins");
+            db.execSQL(String.format("DROP TABLE IF EXISTS %s", DATABASE_TABLE));
             onCreate(db);
         }
     }
@@ -106,6 +115,14 @@ public class DBAdapter {
         initialValues.put(KEY_PROBLEM, flattenArray(solution.getProblem()));
         initialValues.put(KEY_SOLUTION, flattenArray(solution.getSolution()));
         initialValues.put(KEY_IMAGE, bitmapToBytes(solution.getImage()));
+
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+        df.setTimeZone(tz);
+        String nowAsISO = df.format(new Date());
+        initialValues.put(KEY_DATE, nowAsISO);
+
         long id = db.insert(DATABASE_TABLE, null, initialValues);
         updateListeners();
         return id;
@@ -127,25 +144,26 @@ public class DBAdapter {
 
     public ArrayList<Solution> getAllSolutions()
     {
-        ArrayList<Solution> pins = new ArrayList<>();
-        Cursor mCursor = db.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_PROBLEM, KEY_SOLUTION, KEY_IMAGE}, null, null, null, null, null);
+        ArrayList<Solution> solutions = new ArrayList<>();
+        Cursor mCursor = db.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_PROBLEM, KEY_SOLUTION, KEY_IMAGE, KEY_DATE}, null, null, null, null, null);
         while(mCursor.moveToNext()){
-            pins.add(new Solution(
+            solutions.add(new Solution(
                     mCursor.getInt(0),
                     inflateArray(mCursor.getString(1)),
                     inflateArray(mCursor.getString(2)),
-                    bytesToBitmap(mCursor.getBlob(3))
+                    bytesToBitmap(mCursor.getBlob(3)),
+                    mCursor.getString(4)
             ));
         }
         mCursor.close();
 
-        return pins;
+        return solutions;
     }
 
     public Solution getSolution(long rowId) throws SQLException
     {
         Cursor mCursor =
-                db.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_PROBLEM, KEY_SOLUTION, KEY_IMAGE}, KEY_ROWID + "=" + rowId, null,
+                db.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_PROBLEM, KEY_SOLUTION, KEY_IMAGE, KEY_DATE}, KEY_ROWID + "=" + rowId, null,
                         null, null, null, null);
 
         if (mCursor != null) {
@@ -158,7 +176,8 @@ public class DBAdapter {
                 mCursor.getInt(0),
                 inflateArray(mCursor.getString(1)),
                 inflateArray(mCursor.getString(2)),
-                bytesToBitmap(mCursor.getBlob(3))
+                bytesToBitmap(mCursor.getBlob(3)),
+                mCursor.getString(4)
         );
     }
 

@@ -9,6 +9,15 @@ public class Solution {
     private ArrayList<ArrayList<Integer>> problem;
     private ArrayList<ArrayList<Integer>> solution;
     private Bitmap image;
+    private String date;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public int getId() {
         return id;
@@ -50,5 +59,13 @@ public class Solution {
         this.problem = problem;
         this.solution = solution;
         this.image = image;
+    }
+
+    public Solution(int id, ArrayList<ArrayList<Integer>> problem, ArrayList<ArrayList<Integer>> solution, Bitmap image, String date) {
+        this.id = id;
+        this.problem = problem;
+        this.solution = solution;
+        this.image = image;
+        this.date = date;
     }
 }

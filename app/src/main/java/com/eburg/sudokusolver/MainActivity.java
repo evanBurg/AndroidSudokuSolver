@@ -19,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, SolveActivity.class));
     }
 
-    public void viewHistory(View v){
-        //Ye
+    public void viewHistory(View v) {
+        startActivity(new Intent(this, ListActivity.class));
     }
+
 }

@@ -49,11 +49,12 @@ import com.takusemba.spotlight.shape.Circle;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import static android.graphics.Color.argb;
 
-public class SolveActivity extends AppCompatActivity {
+public class SolveActivity extends AppCompatActivity implements DBAdapter.Listener {
     public static final int GET_FROM_GALLERY = 3;
     private Bitmap LOADED_IMAGE = null;
     private TextView output;
@@ -74,12 +75,15 @@ public class SolveActivity extends AppCompatActivity {
     private static final int BOARD_END = 9;
     private static final int originalDimension = 0;
     private static final int newDimension = LinearLayout.LayoutParams.WRAP_CONTENT;
+    private DBAdapter db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ImagePicker.Companion.with(this).crop().start(GET_FROM_GALLERY);
+        db = new DBAdapter(this);
 
+        db.open(this);
         setContentView(R.layout.solve_activity);
         showImage = findViewById(R.id.providedImage);
         chevron = findViewById(R.id.chevron);
@@ -212,6 +216,9 @@ public class SolveActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (resultCode == Activity.RESULT_CANCELED) {
+            finish();
+        }
         //Detects request codes
         if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             Uri selectedImage = data.getData();
@@ -267,4 +274,50 @@ public class SolveActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void solvePuzzle(View v){
+        ArrayList<ArrayList<Integer>> unsolved = new ArrayList<>();
+        for(int i = 0; i < BOARD_END; i++){
+            ArrayList<EditText> row = inputBoard.get(i);
+            unsolved.add(new ArrayList<>());
+            unsolved.get(i).addAll(Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0));
+            for(int j = 0; j < BOARD_END; j++){
+                EditText text = row.get(j);
+                try{
+                    unsolved.get(i).set(j, Integer.parseInt(String.valueOf(text.getText())));
+                }catch (Exception e){
+                    String what = e.getMessage();
+                    String className = e.toString();
+                }
+            }
+        }
+
+        //Send to solve function
+        ArrayList<ArrayList<Integer>> solved = unsolved;
+
+        for(int i = 0; i < BOARD_END; i++){
+            ArrayList<EditText> inputRow = inputBoard.get(i);
+            ArrayList<Integer> numRow = solved.get(i);
+            for(int j = 0; j < BOARD_END; j++){
+                EditText text = inputRow.get(j);
+                Integer num = numRow.get(j);
+                try{
+                    text.setText(String.valueOf(num));
+                    if(unsolved.get(i).get(j) == 0){
+                        text.setTextColor(Color.LTGRAY);
+                    }
+                }catch (Exception e){
+                    String what = e.getMessage();
+                    String className = e.toString();
+                }
+            }
+        }
+
+        //Insert solution into database
+        Solution solution = new Solution(0, unsolved, solved, LOADED_IMAGE);
+        db.insertSolution(solution);
+    }
+
+    @Override
+    public void update() { }
 }

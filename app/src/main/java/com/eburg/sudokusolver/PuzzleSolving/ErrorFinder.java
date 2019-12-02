@@ -8,7 +8,7 @@ import java.util.LinkedHashSet;
 
 
 public class ErrorFinder {
-    public static ArrayList<Coordinate> getErrorCoordsForRow(@NotNull ArrayList<ArrayList<Integer>> board, int yVal) {
+    private static ArrayList<Coordinate> getErrorCoordsForRow(@NotNull ArrayList<ArrayList<Integer>> board, int yVal) {
         ArrayList<Coordinate> errorCoords = new ArrayList<>();
         ArrayList<Integer> row = board.get(yVal);
 
@@ -23,7 +23,7 @@ public class ErrorFinder {
         return errorCoords;
     }
 
-    public static ArrayList<Coordinate> getErrorCoordsForColumn(@NotNull ArrayList<ArrayList<Integer>> board, int xVal) {
+    private static ArrayList<Coordinate> getErrorCoordsForColumn(@NotNull ArrayList<ArrayList<Integer>> board, int xVal) {
         ArrayList<Coordinate> errorCoords = new ArrayList<>();
         ArrayList<Integer> virtualCol = new ArrayList<>();
         for (int y = 0; y < 9; y++) //flatten the column into a 1d vector
@@ -57,7 +57,7 @@ public class ErrorFinder {
         return errorCoords;
     }
 
-    public static ArrayList<Coordinate> getErrorCoordsForBlock(@NotNull ArrayList<ArrayList<Integer>> board, int blockNum) {
+    private static ArrayList<Coordinate> getErrorCoordsForBlock(@NotNull ArrayList<ArrayList<Integer>> board, int blockNum) {
         int yBase = 3 * (blockNum / 3);
         int xBase = 3 * (blockNum % 3);
 

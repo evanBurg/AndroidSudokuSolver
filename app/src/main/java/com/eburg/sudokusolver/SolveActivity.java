@@ -3,6 +3,7 @@ package com.eburg.sudokusolver;
 import android.animation.LayoutTransition;
 import android.animation.TimeInterpolator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,9 +59,8 @@ import static android.graphics.Color.argb;
 public class SolveActivity extends AppCompatActivity implements DBAdapter.Listener {
     public static final int GET_FROM_GALLERY = 3;
     private Bitmap LOADED_IMAGE = null;
-    private TextView output;
+    private Button solveButton;
     private CardView cardView;
-    private RelativeLayout solveContainer;
     private boolean isCollapsed = true;
     private ImageResults lastResults = null;
     private ImageView showImage;
@@ -87,7 +88,7 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
         setContentView(R.layout.solve_activity);
         showImage = findViewById(R.id.providedImage);
         chevron = findViewById(R.id.chevron);
-        solveContainer = findViewById(R.id.solveContainer);
+        solveButton = findViewById(R.id.solvePuzzleButton);
         showImageText = findViewById(R.id.showImageText);
         inputBoardContainer = findViewById(R.id.inputBoardContainer);
         parseContainer = findViewById(R.id.parseContainer);
@@ -149,7 +150,7 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
         }
     }
 
-    private int getBorder(int x, int y){
+    public static int getBorder(int x, int y){
 
         if(((x + 1) % 3 == 0 && x != (BOARD_END - 1)) && (y + 1) % 3 == 0 && y != (BOARD_END - 1)){
             return R.drawable.edit_text_border_both_bold;
@@ -261,9 +262,7 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
                     parseContainer.setVisibility(View.VISIBLE);
                     loader.setVisibility(View.INVISIBLE);
                     showImage.setAdjustViewBounds(true);
-                })
-                .addOnFailureListener(exception -> {
-                    output.setText("Could Not Load Image");
+                    solveButton.setEnabled(true);
                 });
             } catch (FileNotFoundException e) {
                 // TODO Auto-generated catch block
@@ -316,6 +315,13 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
         //Insert solution into database
         Solution solution = new Solution(0, unsolved, solved, LOADED_IMAGE);
         db.insertSolution(solution);
+        Context context = getApplicationContext();
+        CharSequence text = "Solution Saved!";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+        solveButton.setEnabled(false);
     }
 
     @Override

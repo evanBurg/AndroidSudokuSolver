@@ -18,8 +18,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            app:SpinKit_Color="@color/colorAccent" />
+            app:SpinKit_Color="#000000" />
 
+        <TextView
+            android:id="@+id/loadingText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="35dp"
+            android:text="@string/loadingText"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:visibility="invisible" />
         <LinearLayout
             android:id="@+id/parseContainer"
             android:layout_width="match_parent"
@@ -124,8 +133,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="17dp"
                 android:layout_marginRight="17dp"
+                android:layout_marginTop="5dp"
                 android:onClick="solvePuzzle"
                 android:text="@string/solvePuzzle"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:background="@drawable/button_shape"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"

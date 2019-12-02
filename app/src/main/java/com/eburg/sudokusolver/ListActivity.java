@@ -1,5 +1,6 @@
 package com.eburg.sudokusolver;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,15 +14,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
+
 import java.util.ArrayList;
 
-public class ListActivity extends AppCompatActivity implements DBAdapter.Listener {
+public class ListActivity extends AppCompatActivity implements DBAdapter.Listener, NavigationView.OnNavigationItemSelectedListener {
     private DBAdapter db;
     Context context;
     RecyclerView recyclerView;
     LinearLayout linearLayout;
     RecyclerView.Adapter recyclerViewAdapter;
     RecyclerView.LayoutManager recyclerViewLayoutManager;
+    BottomNavigationView bottomNavigationView;
     ArrayList<Solution> solutions;
 
     @Override
@@ -41,6 +46,10 @@ public class ListActivity extends AppCompatActivity implements DBAdapter.Listene
         recyclerView.setLayoutManager(recyclerViewLayoutManager);
         recyclerViewAdapter = new SolutionAdapter(context, solutions, db, this);
         recyclerView.setAdapter(recyclerViewAdapter);
+
+        bottomNavigationView = findViewById(R.id.navigation);
+        bottomNavigationView.setSelectedItemId(R.id.action_history);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
     }
 
     public void onClear(View view) {
@@ -77,6 +86,31 @@ public class ListActivity extends AppCompatActivity implements DBAdapter.Listene
             startActivity(new Intent(this, AboutActivity.class));
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        try {
+            switch (menuItem.getItemId()) {
+                case R.id.action_history:
+                    break;
+                case R.id.action_main:
+                    finish();
+                    break;
+                case R.id.action_solve:
+                    finish();
+                    startActivity(new Intent(this, SolveActivity.class));
+                    break;
+                default:
+                    return false;
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            String what = e.getMessage();
+            return false;
+        }
     }
 
 }

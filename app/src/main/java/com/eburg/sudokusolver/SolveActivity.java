@@ -34,12 +34,15 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
@@ -58,7 +61,7 @@ import java.util.ResourceBundle;
 
 import static android.graphics.Color.argb;
 
-public class SolveActivity extends AppCompatActivity implements DBAdapter.Listener {
+public class SolveActivity extends AppCompatActivity implements DBAdapter.Listener, NavigationView.OnNavigationItemSelectedListener {
     public static final int GET_FROM_GALLERY = 3;
     private Bitmap LOADED_IMAGE = null;
     private Button solveButton;
@@ -72,6 +75,7 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
     private ArrayList<ArrayList<EditText>> inputBoard;
     private LinearLayout parseContainer;
     private SpinKitView loader;
+    BottomNavigationView bottomNavigationView;
     private TextView loadingText;
     private Animation rotateDown;
     private Animation rotateUp;
@@ -108,6 +112,10 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
         ViewGroup.LayoutParams params = showImage.getLayoutParams();
         params.height = originalDimension;
         showImage.setLayoutParams(params);
+
+        bottomNavigationView = findViewById(R.id.navigation);
+        bottomNavigationView.setSelectedItemId(R.id.action_solve);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
 
         for(int i = BOARD_START; i < BOARD_END; i++){
             LinearLayout row = new LinearLayout(this);
@@ -348,5 +356,30 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
             startActivity(new Intent(this, AboutActivity.class));
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        try {
+            switch (menuItem.getItemId()) {
+                case R.id.action_history:
+                    finish();
+                    startActivity(new Intent(this, ListActivity.class));
+                    break;
+                case R.id.action_main:
+                    finish();
+                    break;
+                case R.id.action_solve:
+                    break;
+                default:
+                    return false;
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            String what = e.getMessage();
+            return false;
+        }
     }
 }

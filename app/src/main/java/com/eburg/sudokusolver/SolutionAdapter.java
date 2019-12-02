@@ -18,12 +18,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import static com.eburg.sudokusolver.SolveActivity.getBorder;
 
@@ -61,11 +67,27 @@ public class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHo
         } catch (Exception e) {
             holder.providedImage.setImageResource(R.drawable.ic_history);
         }
-        s
-        holder.date.setText(SubjectValues.get(position).getDate());
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();
+        DateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+        DateFormat formatter = new SimpleDateFormat("EE MMM d y '@'hh:mm a");
+        parser.setTimeZone(tz);
+        try {
+            Date date = parser.parse(SubjectValues.get(position).getDate());
+            holder.date.setText(formatter.format(date));
+        }catch (Exception e){
+            holder.date.setText(SubjectValues.get(position).getDate());
+        }
 
         final int pos = position;
-        holder.delBtn.setOnClickListener(v -> db.deleteSolution(SubjectValues.get(pos).getId()));
+        holder.delBtn.setOnClickListener(v -> {
+            db.deleteSolution(SubjectValues.get(pos).getId());
+            CharSequence text = "Solution Deleted!";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(this.context, text, duration);
+            toast.show();
+        });
 
         holder.cardView.setOnClickListener(v -> toggleSolution(holder, position));
         holder.solveBtn.setOnClickListener(v -> toggleSolution(holder, position));

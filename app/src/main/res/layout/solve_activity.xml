@@ -22,13 +22,13 @@
 
         <TextView
             android:id="@+id/loadingText"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginTop="35dp"
+            android:layout_below="@id/loader"
             android:text="@string/loadingText"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:visibility="invisible" />
+            />
         <LinearLayout
             android:id="@+id/parseContainer"
             android:layout_width="match_parent"

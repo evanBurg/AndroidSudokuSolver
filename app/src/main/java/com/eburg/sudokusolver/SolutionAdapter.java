@@ -92,6 +92,7 @@ public class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHo
 
                             try{
                                 text.setText(String.valueOf(answer));
+                                text.setTextColor(Color.BLACK);
                                 if(input == 0){
                                     text.setTextColor(Color.LTGRAY);
                                 }

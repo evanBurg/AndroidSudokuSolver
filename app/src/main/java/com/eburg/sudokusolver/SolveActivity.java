@@ -70,6 +70,7 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
     private ArrayList<ArrayList<EditText>> inputBoard;
     private LinearLayout parseContainer;
     private SpinKitView loader;
+    private TextView loadingText;
     private Animation rotateDown;
     private Animation rotateUp;
     private static final int BOARD_START = 0;
@@ -99,6 +100,7 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
         loader = findViewById(R.id.loader);
         inputBoard = new ArrayList<>();
         cardView = findViewById(R.id.imageContainer);
+        loadingText = findViewById(R.id.loadingText);
         rotateDown = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_chevron_down);
         rotateUp = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_chevron_up);
         ViewGroup.LayoutParams params = showImage.getLayoutParams();
@@ -121,6 +123,8 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
             }
             inputBoardContainer.addView(row);
         }
+
+        loader.setOnClickListener(v -> ImagePicker.Companion.with(this).crop().start(GET_FROM_GALLERY));
     }
 
     public void onImageClick(View v) {
@@ -261,6 +265,7 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
                     showImage.setVisibility(View.VISIBLE);
                     parseContainer.setVisibility(View.VISIBLE);
                     loader.setVisibility(View.INVISIBLE);
+                    loadingText.setVisibility(View.INVISIBLE);
                     showImage.setAdjustViewBounds(true);
                     solveButton.setEnabled(true);
                 });

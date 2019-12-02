@@ -18,6 +18,8 @@ import android.transition.ChangeBounds;
 import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -331,4 +333,20 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
 
     @Override
     public void update() { }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_list_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.about) {
+            startActivity(new Intent(this, AboutActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

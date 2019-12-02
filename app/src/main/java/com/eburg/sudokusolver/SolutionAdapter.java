@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.Gravity;
@@ -60,74 +61,63 @@ public class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHo
         final int pos = position;
         holder.delBtn.setOnClickListener(v -> db.deleteSolution(SubjectValues.get(pos).getId()));
 
-       ArrayList<ArrayList<Integer>> solutionArray = SubjectValues.get(position).getSolution();
+        holder.cardView.setOnClickListener(v -> toggleSolution(holder, position));
+        holder.solveBtn.setOnClickListener(v -> toggleSolution(holder, position));
+    }
+
+    private void toggleSolution(ViewHolder holder, int position){
+        ArrayList<ArrayList<Integer>> solutionArray = SubjectValues.get(position).getSolution();
         ArrayList<ArrayList<Integer>> problemArray = SubjectValues.get(position).getSolution();
-        holder.cardView.setOnClickListener(v -> {
-            if(holder.showingSolution){
-                holder.showingSolution = false;
-                holder.providedImage.setVisibility(View.VISIBLE);
-                holder.solutionContainer.setVisibility(View.INVISIBLE);
-            }else{
-                holder.showingSolution = true;
-                holder.providedImage.setVisibility(View.INVISIBLE);
-                holder.solutionContainer.setVisibility(View.VISIBLE);
+        if(holder.showingSolution){
+            holder.showingSolution = false;
+//            holder.solveBtn.setBackgroundResource(R.drawable.button_shape);
+            holder.solveBtn.setImageResource(R.drawable.ic_check_circle_black_24dp);
+            holder.providedImage.setVisibility(View.VISIBLE);
+            holder.solutionContainer.setVisibility(View.INVISIBLE);
+        }else{
+            holder.showingSolution = true;
+//            holder.solveBtn.setBackgroundResource(R.drawable.button_shape_black);
+            holder.solveBtn.setImageResource(R.drawable.ic_check_circle_green_500_24dp);
+            holder.providedImage.setVisibility(View.INVISIBLE);
+            holder.solutionContainer.setVisibility(View.VISIBLE);
 
-                if(!holder.createdSolutionBoard){
-                    holder.createdSolutionBoard = true;
-                    for(int i = 0; i < 9; i++) {
-                        LinearLayout row = new LinearLayout(this.context);
-                        holder.inputBoard.add(new ArrayList<EditText>());
-                        for (int j = 0; j < 9; j++) {
-                            EditText text = new EditText(this.context);
-                            text.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
-                            text.setInputType(InputType.TYPE_CLASS_NUMBER);
-                            text.setGravity(Gravity.CENTER_HORIZONTAL);
-                            int maxLength = 1;
-                            text.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
-                            text.setBackgroundResource(getBorder(j, i));
-                            text.setEnabled(false);
+            if(!holder.createdSolutionBoard){
+                holder.createdSolutionBoard = true;
+                for(int i = 0; i < 9; i++) {
+                    LinearLayout row = new LinearLayout(this.context);
+                    holder.inputBoard.add(new ArrayList<EditText>());
+                    for (int j = 0; j < 9; j++) {
+                        EditText text = new EditText(this.context);
+                        text.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
+                        text.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        text.setGravity(Gravity.CENTER_HORIZONTAL);
+                        int maxLength = 1;
+                        text.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
+                        text.setBackgroundResource(getBorder(j, i));
+                        text.setEnabled(false);
+                        text.setOnClickListener(v -> toggleSolution(holder, position));
 
-                            Integer input = problemArray.get(i).get(j);
-                            Integer answer = solutionArray.get(i).get(j);
+                        Integer input = problemArray.get(i).get(j);
+                        Integer answer = solutionArray.get(i).get(j);
 
-                            try{
-                                text.setText(String.valueOf(answer));
-                                text.setTextColor(Color.BLACK);
-                                if(input == 0){
-                                    text.setTextColor(Color.LTGRAY);
-                                }
-                            }catch (Exception e){
-                                String what = e.getMessage();
-                                String className = e.toString();
+                        try{
+                            text.setText(String.valueOf(answer));
+                            text.setTextColor(Color.BLACK);
+                            if(input == 0){
+                                text.setTextColor(Color.LTGRAY);
                             }
-
-                            row.addView(text);
-                            holder.inputBoard.get(i).add(text);
+                        }catch (Exception e){
+                            String what = e.getMessage();
+                            String className = e.toString();
                         }
-                        holder.solutionContainer.addView(row);
+
+                        row.addView(text);
+                        holder.inputBoard.get(i).add(text);
                     }
-                }
-            }
-        });
-        /*
-        for(int i = 0; i < BOARD_END; i++){
-            ArrayList<EditText> inputRow = inputBoard.get(i);
-            ArrayList<Integer> numRow = solved.get(i);
-            for(int j = 0; j < BOARD_END; j++){
-                EditText text = inputRow.get(j);
-                Integer num = numRow.get(j);
-                try{
-                    text.setText(String.valueOf(num));
-                    if(unsolved.get(i).get(j) == 0){
-                        text.setTextColor(Color.LTGRAY);
-                    }
-                }catch (Exception e){
-                    String what = e.getMessage();
-                    String className = e.toString();
+                    holder.solutionContainer.addView(row);
                 }
             }
         }
-         */
     }
 
     @Override
@@ -139,6 +129,7 @@ public class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView providedImage;
         private ImageButton delBtn;
+        private ImageButton solveBtn;
         private TextView date;
         private CardView cardView;
         private LinearLayout solutionContainer;
@@ -151,6 +142,7 @@ public class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHo
 
             providedImage = v.findViewById(R.id.providedImage);
             delBtn = v.findViewById(R.id.delete);
+            solveBtn = v.findViewById(R.id.slvBtn);
             date = v.findViewById(R.id.date);
             cardView = v.findViewById(R.id.card_view);
             solutionContainer = v.findViewById(R.id.solutionContainer);

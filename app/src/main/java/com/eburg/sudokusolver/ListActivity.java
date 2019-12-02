@@ -63,20 +63,20 @@ public class ListActivity extends AppCompatActivity implements DBAdapter.Listene
         onRefresh();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.activity_list_menu, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_list_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//
-//        if (id == R.id.about) {
-//            startActivity(new Intent(this, AboutActivity.class));
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.about) {
+            startActivity(new Intent(this, AboutActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }

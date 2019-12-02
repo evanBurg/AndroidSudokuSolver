@@ -15,4 +15,5 @@
     <string name="solvePuzzle">Solve Puzzle!</string>
     <string name="clear">Clear All</string>
     <string name="loadingText">Waiting for Image...</string>
+    <string name="aboutApp" >App written by Evan Burgess and Robert Clarke during November, 2019. This app is designed to allow you to scan a Sudoku puzzle in to the app and allow the app to solve the problem for you. After solving a puzzle you can view it again by clicking the card in the Previous Puzzles tab</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.eburg.sudokusolver;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 import java.util.ArrayList;
 
@@ -8,7 +9,7 @@ public class Solution {
     private int id;
     private ArrayList<ArrayList<Integer>> problem;
     private ArrayList<ArrayList<Integer>> solution;
-    private Bitmap image;
+    private Uri image;
     private String date;
 
     public String getDate() {
@@ -43,25 +44,40 @@ public class Solution {
         this.solution = solution;
     }
 
-    public Bitmap getImage() {
+    public Uri getImage() {
         return image;
     }
 
-    public void setImage(Bitmap image) {
+    public void setImage(Uri image) {
         this.image = image;
     }
 
     public Solution() {
     }
 
-    public Solution(int id, ArrayList<ArrayList<Integer>> problem, ArrayList<ArrayList<Integer>> solution, Bitmap image) {
+    public Solution(int id, ArrayList<ArrayList<Integer>> problem, ArrayList<ArrayList<Integer>> solution, String image) {
+        this.id = id;
+        this.problem = problem;
+        this.solution = solution;
+        this.image = Uri.parse(image);
+    }
+
+    public Solution(int id, ArrayList<ArrayList<Integer>> problem, ArrayList<ArrayList<Integer>> solution, String image, String date) {
+        this.id = id;
+        this.problem = problem;
+        this.solution = solution;
+        this.image = Uri.parse(image);
+        this.date = date;
+    }
+
+    public Solution(int id, ArrayList<ArrayList<Integer>> problem, ArrayList<ArrayList<Integer>> solution, Uri image) {
         this.id = id;
         this.problem = problem;
         this.solution = solution;
         this.image = image;
     }
 
-    public Solution(int id, ArrayList<ArrayList<Integer>> problem, ArrayList<ArrayList<Integer>> solution, Bitmap image, String date) {
+    public Solution(int id, ArrayList<ArrayList<Integer>> problem, ArrayList<ArrayList<Integer>> solution, Uri image, String date) {
         this.id = id;
         this.problem = problem;
         this.solution = solution;

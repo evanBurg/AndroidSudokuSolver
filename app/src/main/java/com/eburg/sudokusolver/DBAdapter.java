@@ -15,8 +15,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import static com.eburg.sudokusolver.Utilities.bitmapToBytes;
-import static com.eburg.sudokusolver.Utilities.bytesToBitmap;
 import static com.eburg.sudokusolver.Utilities.flattenArray;
 import static com.eburg.sudokusolver.Utilities.inflateArray;
 
@@ -36,7 +34,7 @@ public class DBAdapter {
 
     static final String DATABASE_NAME = "SudokuSolver";
     static final String DATABASE_TABLE = "previouspuzzles";
-    static final int DATABASE_VERSION = 4;
+    static final int DATABASE_VERSION = 6;
 
     ArrayList<Listener> listeners;
 
@@ -45,7 +43,7 @@ public class DBAdapter {
                     "%s integer primary key autoincrement," +
                     "%s TEXT not null," +
                     "%s TEXT not null," +
-                    "%s BLOB not null," +
+                    "%s TEXT not null," +
                     "%s TEXT not null" +
                     ")",
             DATABASE_TABLE,
@@ -114,7 +112,7 @@ public class DBAdapter {
 
         initialValues.put(KEY_PROBLEM, flattenArray(solution.getProblem()));
         initialValues.put(KEY_SOLUTION, flattenArray(solution.getSolution()));
-        initialValues.put(KEY_IMAGE, bitmapToBytes(solution.getImage()));
+        initialValues.put(KEY_IMAGE, solution.getImage().toString());
 
         Calendar cal = Calendar.getInstance();
         TimeZone tz = cal.getTimeZone();
@@ -151,7 +149,7 @@ public class DBAdapter {
                     mCursor.getInt(0),
                     inflateArray(mCursor.getString(1)),
                     inflateArray(mCursor.getString(2)),
-                    bytesToBitmap(mCursor.getBlob(3)),
+                    mCursor.getString(3),
                     mCursor.getString(4)
             ));
         }
@@ -176,7 +174,7 @@ public class DBAdapter {
                 mCursor.getInt(0),
                 inflateArray(mCursor.getString(1)),
                 inflateArray(mCursor.getString(2)),
-                bytesToBitmap(mCursor.getBlob(3)),
+                mCursor.getString(3),
                 mCursor.getString(4)
         );
     }
@@ -186,7 +184,7 @@ public class DBAdapter {
         ContentValues args = new ContentValues();
         args.put(KEY_PROBLEM, flattenArray(solution.getProblem()));
         args.put(KEY_SOLUTION, flattenArray(solution.getSolution()));
-        args.put(KEY_IMAGE, bitmapToBytes(solution.getImage()));
+        args.put(KEY_IMAGE, solution.getImage().toString());
         boolean success = db.update(DATABASE_TABLE, args, KEY_ROWID + "=" + solution.getId(), null) > 0;
         updateListeners();
         return success;

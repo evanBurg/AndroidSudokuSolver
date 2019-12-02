@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:animateLayoutChanges="true"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -8,7 +9,8 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
         android:layout_gravity="center"
         android:layout_margin="15dp"
         android:elevation="3dp"
@@ -18,6 +20,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
             android:padding="12dp">
 
             <TextView
@@ -32,9 +35,11 @@
                 android:id="@+id/solutionContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
                 android:layout_below="@id/date"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
+                android:layout_centerInParent="true"
+                android:paddingTop="50dp"
+                android:paddingBottom="50dp"
                 android:orientation="vertical"
                 android:visibility="invisible"
             />
@@ -44,13 +49,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/date"
-                android:layout_gravity="center_horizontal" />
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="60dp"
+                />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/buttonContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/providedImage"
-                android:layout_marginTop="15dp">
+                android:layout_alignParentBottom="true"
+                android:padding="15dp">
 
                 <ImageButton
                     android:id="@+id/slvBtn"
@@ -64,26 +72,23 @@
                     app:layout_constraintWidth_default="percent"
                     app:layout_constraintWidth_percent=".5"
                     card_view:layout_constraintBottom_toBottomOf="parent"
-                    card_view:layout_constraintEnd_toEndOf="parent"
-                    />
+                    card_view:layout_constraintEnd_toEndOf="parent" />
 
                 <ImageButton
                     android:id="@+id/delete"
-                    android:layout_marginEnd="24dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:background="@drawable/button_shape"
                     android:padding="5dp"
                     android:src="@drawable/ic_delete_black_24dp"
                     android:textColor="#000000"
                     android:textSize="20sp"
-                    android:background="@drawable/button_shape"
                     app:layout_constraintWidth_default="percent"
                     app:layout_constraintWidth_percent=".5"
                     card_view:layout_constraintBottom_toBottomOf="parent"
-                    card_view:layout_constraintEnd_toStartOf="@id/slvBtn"
-                    />
+                    card_view:layout_constraintEnd_toStartOf="@id/slvBtn" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         </RelativeLayout>
 

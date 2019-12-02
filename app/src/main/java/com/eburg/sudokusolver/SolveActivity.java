@@ -64,6 +64,7 @@ import static android.graphics.Color.argb;
 public class SolveActivity extends AppCompatActivity implements DBAdapter.Listener, NavigationView.OnNavigationItemSelectedListener {
     public static final int GET_FROM_GALLERY = 3;
     private Bitmap LOADED_IMAGE = null;
+    private Uri IMAGE_URI = null;
     private Button solveButton;
     private CardView cardView;
     private boolean isCollapsed = true;
@@ -237,6 +238,7 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
         //Detects request codes
         if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             Uri selectedImage = data.getData();
+            IMAGE_URI = selectedImage;
             LOADED_IMAGE = null;
             try {
                 LOADED_IMAGE = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
@@ -328,7 +330,7 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
         }
 
         //Insert solution into database
-        Solution solution = new Solution(0, unsolved, solved, LOADED_IMAGE);
+        Solution solution = new Solution(0, unsolved, solved, IMAGE_URI);
         db.insertSolution(solution);
         Context context = getApplicationContext();
         CharSequence text = "Solution Saved!";

@@ -38,6 +38,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.eburg.sudokusolver.PuzzleSolving.StochasticOptimizationSolver;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.tasks.Task;
@@ -309,11 +310,13 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
         }
 
         //Send to solve function
-        ArrayList<ArrayList<Integer>> solved = unsolved;
+        Solution solution = new Solution(0, unsolved, unsolved, IMAGE_URI);
+        solution = StochasticOptimizationSolver.solve(solution);
 
+        //Show solved cells as light grey
         for(int i = 0; i < BOARD_END; i++){
             ArrayList<EditText> inputRow = inputBoard.get(i);
-            ArrayList<Integer> numRow = solved.get(i);
+            ArrayList<Integer> numRow = solution.getSolution().get(i);
             for(int j = 0; j < BOARD_END; j++){
                 EditText text = inputRow.get(j);
                 Integer num = numRow.get(j);
@@ -330,7 +333,6 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
         }
 
         //Insert solution into database
-        Solution solution = new Solution(0, unsolved, solved, IMAGE_URI);
         db.insertSolution(solution);
         Context context = getApplicationContext();
         CharSequence text = "Solution Saved!";

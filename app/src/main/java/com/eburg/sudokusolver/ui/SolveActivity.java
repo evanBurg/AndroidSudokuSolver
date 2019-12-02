@@ -1,7 +1,6 @@
-package com.eburg.sudokusolver;
+package com.eburg.sudokusolver.ui;
 
 import android.animation.LayoutTransition;
-import android.animation.TimeInterpolator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -24,13 +23,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +34,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import com.eburg.sudokusolver.PuzzleSolving.StochasticOptimizationSolver;
+import com.eburg.sudokusolver.models.ImageResults;
+import com.eburg.sudokusolver.solving.StochasticOptimizationSolver;
+import com.eburg.sudokusolver.R;
+import com.eburg.sudokusolver.models.Solution;
+import com.eburg.sudokusolver.database.DBAdapter;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.tasks.Task;
@@ -48,17 +48,11 @@ import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
-import com.takusemba.spotlight.OnTargetListener;
-import com.takusemba.spotlight.Spotlight;
-import com.takusemba.spotlight.Target;
-import com.takusemba.spotlight.effet.RippleEffect;
-import com.takusemba.spotlight.shape.Circle;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.ResourceBundle;
 
 import static android.graphics.Color.argb;
 

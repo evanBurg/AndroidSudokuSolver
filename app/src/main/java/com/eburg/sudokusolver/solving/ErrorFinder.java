@@ -1,4 +1,4 @@
-package com.eburg.sudokusolver.PuzzleSolving;
+package com.eburg.sudokusolver.solving;
 
 import org.jetbrains.annotations.NotNull;
 

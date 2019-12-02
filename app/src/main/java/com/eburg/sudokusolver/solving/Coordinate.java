@@ -1,4 +1,4 @@
-package com.eburg.sudokusolver.PuzzleSolving;
+package com.eburg.sudokusolver.solving;
 
 public class Coordinate {
     public int x;

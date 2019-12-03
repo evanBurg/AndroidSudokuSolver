@@ -41,6 +41,9 @@ import com.eburg.sudokusolver.solving.StochasticOptimizationSolver;
 import com.eburg.sudokusolver.R;
 import com.eburg.sudokusolver.models.Solution;
 import com.eburg.sudokusolver.database.DBAdapter;
+import com.eburg.sudokusolver.solving.backtracking.BacktrackingSolver;
+import com.eburg.sudokusolver.solving.backtracking.Grid;
+import com.eburg.sudokusolver.solving.backtracking.GridAdapter;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.tasks.Task;
@@ -369,7 +372,11 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
         protected String doInBackground(String... params) {
             publishProgress("Solving...");
             try {
-                this.solution = StochasticOptimizationSolver.solve(this.solution);
+                //this.solution = StochasticOptimizationSolver.solve(this.solution);
+                Grid grid = GridAdapter.toGrid(this.solution.getProblem());
+                BacktrackingSolver solver = new BacktrackingSolver();
+                solver.solve(grid); //may throw IllegalStateException if it is a non-solvable sudoku
+                this.solution.setSolution(GridAdapter.fromGrid(grid));
                 publishProgress("Solved");
             } catch (Exception e) {
                 e.printStackTrace();

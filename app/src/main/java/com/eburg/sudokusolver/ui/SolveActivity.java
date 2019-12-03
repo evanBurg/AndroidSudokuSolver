@@ -2,6 +2,7 @@ package com.eburg.sudokusolver.ui;
 
 import android.animation.LayoutTransition;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -373,14 +374,21 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
             publishProgress("Solving...");
             try {
                 //this.solution = StochasticOptimizationSolver.solve(this.solution);
-                Grid grid = GridAdapter.toGrid(this.solution.getProblem());
+
+                publishProgress("Solved"); Grid grid = GridAdapter.toGrid(this.solution.getProblem());
                 BacktrackingSolver solver = new BacktrackingSolver();
                 solver.solve(grid); //may throw IllegalStateException if it is a non-solvable sudoku
                 this.solution.setSolution(GridAdapter.fromGrid(grid));
-                publishProgress("Solved");
             } catch (Exception e) {
                 e.printStackTrace();
                 publishProgress("Failed");
+
+                new AlertDialog.Builder(SolveActivity.this)
+                        .setTitle("Could not Solve Puzzle")
+                        .setMessage("Sorry we ran into an issue while trying to solve your puzzle, please make sure it is a valid Sudoku puzzle and try again.")
+                        .setIcon(R.drawable.ic_error_outline_black_24dp)
+                        .show();
+
                 return "failure";
             }
             return "success";
@@ -414,11 +422,10 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
 
             //Insert solution into database
             db.insertSolution(solution);
-            Context context = getApplicationContext();
             CharSequence text = "Solution Saved!";
             int duration = Toast.LENGTH_SHORT;
 
-            Toast toast = Toast.makeText(context, text, duration);
+            Toast toast = Toast.makeText(SolveActivity.this, text, duration);
             toast.show();
             solveButton.setEnabled(false);
             progressDialog.dismiss();
@@ -427,9 +434,14 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
 
         @Override
         protected void onPreExecute() {
+            progressDialog = new ProgressDialog(SolveActivity.this, R.style.SpinnerColor);
             progressDialog = ProgressDialog.show(SolveActivity.this,
                     "Solving",
-                    "Please wait while we solve your puzzle...");
+                    "Please wait while we solve your puzzle...",
+                    true,
+                    false,
+                    null
+            );
         }
 
 

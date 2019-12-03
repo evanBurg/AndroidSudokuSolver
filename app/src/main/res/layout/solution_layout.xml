@@ -50,8 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/date"
                 android:layout_centerInParent="true"
-                android:layout_marginBottom="60dp"
-                />
+                android:adjustViewBounds="true" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/buttonContainer"

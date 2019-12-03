@@ -282,6 +282,7 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
                     loadingText.setVisibility(View.INVISIBLE);
                     showImage.setAdjustViewBounds(true);
                     solveButton.setEnabled(true);
+                    solveButton.setVisibility(View.VISIBLE);
                 });
             } catch (FileNotFoundException e) {
                 // TODO Auto-generated catch block
@@ -379,7 +380,8 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
             try {
                 //this.solution = StochasticOptimizationSolver.solve(this.solution);
 
-                publishProgress("Solved"); Grid grid = GridAdapter.toGrid(this.solution.getProblem());
+                publishProgress("Solved");
+                Grid grid = GridAdapter.toGrid(this.solution.getProblem());
                 BacktrackingSolver solver = new BacktrackingSolver();
                 solver.solve(grid); //may throw IllegalStateException if it is a non-solvable sudoku
                 this.solution.setSolution(GridAdapter.fromGrid(grid));
@@ -397,6 +399,7 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
         protected void onPostExecute(String result) {
             // execution of result of Long time consuming operation
             if(result.equals("failure")){
+                progressDialog.hide();
                 new AlertDialog.Builder(SolveActivity.this)
                         .setTitle("Could not Solve Puzzle")
                         .setMessage("Sorry we ran into an issue while trying to solve your puzzle, please make sure it is a valid Sudoku puzzle and try again.")
@@ -432,6 +435,7 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
                 Toast toast = Toast.makeText(SolveActivity.this, text, duration);
                 toast.show();
                 solveButton.setEnabled(false);
+                solveButton.setVisibility(View.INVISIBLE);
                 progressDialog.dismiss();
             }
         }

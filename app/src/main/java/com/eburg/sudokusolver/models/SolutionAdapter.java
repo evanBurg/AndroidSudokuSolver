@@ -96,7 +96,7 @@ public class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHo
         holder.solveBtn.setOnClickListener(v -> toggleSolution(holder, position));
 
         ArrayList<ArrayList<Integer>> solutionArray = SubjectValues.get(position).getSolution();
-        ArrayList<ArrayList<Integer>> problemArray = SubjectValues.get(position).getSolution();
+        ArrayList<ArrayList<Integer>> problemArray = SubjectValues.get(position).getProblem();
         for (int i = 0; i < 9; i++) {
             LinearLayout row = new LinearLayout(this.context);
             holder.inputBoard.add(new ArrayList<EditText>());

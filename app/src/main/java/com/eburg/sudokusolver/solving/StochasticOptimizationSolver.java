@@ -1,8 +1,7 @@
-package com.eburg.sudokusolver.PuzzleSolving;
+package com.eburg.sudokusolver.solving;
 
-import com.eburg.sudokusolver.Solution;
+import com.eburg.sudokusolver.models.Solution;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

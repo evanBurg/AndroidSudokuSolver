@@ -1,4 +1,4 @@
-package com.eburg.sudokusolver;
+package com.eburg.sudokusolver.database;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -8,6 +8,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.eburg.sudokusolver.models.Solution;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,8 +17,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import static com.eburg.sudokusolver.Utilities.flattenArray;
-import static com.eburg.sudokusolver.Utilities.inflateArray;
+import static com.eburg.sudokusolver.database.Utilities.flattenArray;
+import static com.eburg.sudokusolver.database.Utilities.inflateArray;
 
 public class DBAdapter {
 

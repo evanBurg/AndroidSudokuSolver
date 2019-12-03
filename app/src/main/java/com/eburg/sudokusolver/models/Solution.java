@@ -1,4 +1,4 @@
-package com.eburg.sudokusolver;
+package com.eburg.sudokusolver.models;
 
 import android.graphics.Bitmap;
 import android.net.Uri;

@@ -1,7 +1,8 @@
-package com.eburg.sudokusolver.PuzzleSolving;
+package com.eburg.sudokusolver.solving;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -72,9 +73,17 @@ public class ErrorFinder {
             uniqueCoords.addAll(getErrorCoordsForColumn(board, q));
             uniqueCoords.addAll(getErrorCoordsForBlock(board, q));
         }
-
         ArrayList<Coordinate> errorCoords = new ArrayList<>(uniqueCoords);
         errorCoords.removeAll(canonicalPositions);
+        Collections.sort(errorCoords);
+        int x = 0;
+        while (x < errorCoords.size()-1) {
+            if (errorCoords.get(x).equals(errorCoords.get(x+1))) {
+                errorCoords.remove(x);
+                continue;
+            }
+            x++;
+        }
         return errorCoords;
     }
 }

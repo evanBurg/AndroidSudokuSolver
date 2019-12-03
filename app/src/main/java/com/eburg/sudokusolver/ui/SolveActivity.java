@@ -311,9 +311,13 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
         }
 
         //Send to solve function
-        Solution solution = new Solution(0, unsolved, unsolved, IMAGE_URI);
-        AsyncTaskRunner runner = new AsyncTaskRunner(solution);
-        runner.execute();
+        try {
+            Solution solution = new Solution(0, unsolved, unsolved, IMAGE_URI);
+            AsyncTaskRunner runner = new AsyncTaskRunner(solution);
+            runner.execute();
+        }catch (Exception e){
+
+        }
     }
 
     @Override
@@ -383,12 +387,6 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
                 e.printStackTrace();
                 publishProgress("Failed");
 
-                new AlertDialog.Builder(SolveActivity.this)
-                        .setTitle("Could not Solve Puzzle")
-                        .setMessage("Sorry we ran into an issue while trying to solve your puzzle, please make sure it is a valid Sudoku puzzle and try again.")
-                        .setIcon(R.drawable.ic_error_outline_black_24dp)
-                        .show();
-
                 return "failure";
             }
             return "success";
@@ -398,37 +396,44 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
         @Override
         protected void onPostExecute(String result) {
             // execution of result of Long time consuming operation
-
-            //Show solved cells as light grey
-            ArrayList<ArrayList<Integer>> solved = solution.getSolution();
-            ArrayList<ArrayList<Integer>> unsolved = solution.getProblem();
-            for(int i = 0; i < BOARD_END; i++){
-                ArrayList<EditText> inputRow = inputBoard.get(i);
-                ArrayList<Integer> numRow = solved.get(i);
-                for(int j = 0; j < BOARD_END; j++){
-                    EditText text = inputRow.get(j);
-                    Integer num = numRow.get(j);
-                    try{
-                        text.setText(String.valueOf(num));
-                        if(unsolved.get(i).get(j) == 0){
-                            text.setTextColor(Color.LTGRAY);
+            if(result.equals("failure")){
+                new AlertDialog.Builder(SolveActivity.this)
+                        .setTitle("Could not Solve Puzzle")
+                        .setMessage("Sorry we ran into an issue while trying to solve your puzzle, please make sure it is a valid Sudoku puzzle and try again.")
+                        .setIcon(R.drawable.ic_error_outline_black_24dp)
+                        .show();
+            }else {
+                //Show solved cells as light grey
+                ArrayList<ArrayList<Integer>> solved = solution.getSolution();
+                ArrayList<ArrayList<Integer>> unsolved = solution.getProblem();
+                for (int i = 0; i < BOARD_END; i++) {
+                    ArrayList<EditText> inputRow = inputBoard.get(i);
+                    ArrayList<Integer> numRow = solved.get(i);
+                    for (int j = 0; j < BOARD_END; j++) {
+                        EditText text = inputRow.get(j);
+                        Integer num = numRow.get(j);
+                        try {
+                            text.setText(String.valueOf(num));
+                            if (unsolved.get(i).get(j) == 0) {
+                                text.setTextColor(Color.LTGRAY);
+                            }
+                        } catch (Exception e) {
+                            String what = e.getMessage();
+                            String className = e.toString();
                         }
-                    }catch (Exception e){
-                        String what = e.getMessage();
-                        String className = e.toString();
                     }
                 }
+
+                //Insert solution into database
+                db.insertSolution(solution);
+                CharSequence text = "Solution Saved!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(SolveActivity.this, text, duration);
+                toast.show();
+                solveButton.setEnabled(false);
+                progressDialog.dismiss();
             }
-
-            //Insert solution into database
-            db.insertSolution(solution);
-            CharSequence text = "Solution Saved!";
-            int duration = Toast.LENGTH_SHORT;
-
-            Toast toast = Toast.makeText(SolveActivity.this, text, duration);
-            toast.show();
-            solveButton.setEnabled(false);
-            progressDialog.dismiss();
         }
 
 

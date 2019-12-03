@@ -13,4 +13,17 @@ public class GridAdapter {
 
         return Grid.of(intGrid);
     }
+
+    public static ArrayList<ArrayList<Integer>> fromGrid(Grid grid) {
+        ArrayList<ArrayList<Integer>> results = new ArrayList<ArrayList<Integer>>();
+
+        for (int y = 0; y < 9; y++) {
+            ArrayList<Integer> row = new ArrayList<>();
+            for (int x = 0; x < 9; x++)
+                row.add(new Integer(grid.getCell(y, x).getValue()));
+            results.add(row);
+        }
+
+        return results;
+    }
 }

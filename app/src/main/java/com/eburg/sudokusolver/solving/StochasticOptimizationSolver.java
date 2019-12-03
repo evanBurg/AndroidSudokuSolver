@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+import kotlin.NotImplementedError;
+
 public class StochasticOptimizationSolver {
 
     private static ArrayList<Coordinate> boardToCoordinateList(ArrayList<ArrayList<Integer>> board) {
@@ -21,31 +23,32 @@ public class StochasticOptimizationSolver {
     }
 
     public static Solution solve(Solution solutionModel) {
-        ArrayList<Coordinate> canonicalPositions = boardToCoordinateList(solutionModel.getProblem());
-        ArrayList<ArrayList<Integer>> board = solutionModel.getProblem();
-
-        ArrayList<Integer> allCellValues = new ArrayList<>();
-        for (int x = 0; x < 9; x++)
-            allCellValues.addAll(Arrays.asList(1,2,3,4,5,6,7,8,9));
-        for (Coordinate coord : canonicalPositions)
-            allCellValues.remove(Integer.valueOf(board.get(coord.y).get(coord.x)));
-        Collections.shuffle(allCellValues);
-
-        //Initial random assignment to unlabeled positions
-        for (int y = 0; y < 9; y++) {
-            for (int x = 0; x < 9; x++) {
-                if (board.get(y).get(x).equals(0)) {
-                    board.get(y).set(x, allCellValues.get(0));
-                    allCellValues.remove(0);
-                }
-            }
-        }
-
-        //Call recursive solving method to get board state
-        ArrayList<ArrayList<Integer>> solvedBoard = stochasticSolve(board, canonicalPositions);
-        solutionModel.setSolution(solvedBoard);
-
-        return solutionModel;
+        throw new NotImplementedError("Not successfully implemented");
+//        ArrayList<Coordinate> canonicalPositions = boardToCoordinateList(solutionModel.getProblem());
+//        ArrayList<ArrayList<Integer>> board = solutionModel.getProblem();
+//
+//        ArrayList<Integer> allCellValues = new ArrayList<>();
+//        for (int x = 0; x < 9; x++)
+//            allCellValues.addAll(Arrays.asList(1,2,3,4,5,6,7,8,9));
+//        for (Coordinate coord : canonicalPositions)
+//            allCellValues.remove(Integer.valueOf(board.get(coord.y).get(coord.x)));
+//        Collections.shuffle(allCellValues);
+//
+//        //Initial random assignment to unlabeled positions
+//        for (int y = 0; y < 9; y++) {
+//            for (int x = 0; x < 9; x++) {
+//                if (board.get(y).get(x).equals(0)) {
+//                    board.get(y).set(x, allCellValues.get(0));
+//                    allCellValues.remove(0);
+//                }
+//            }
+//        }
+//
+//        //Call recursive solving method to get board state
+//        ArrayList<ArrayList<Integer>> solvedBoard = stochasticSolve(board, canonicalPositions);
+//        solutionModel.setSolution(solvedBoard);
+//
+//        return solutionModel;
     }
 
     private static ArrayList<ArrayList<Integer>> stochasticSolve(ArrayList<ArrayList<Integer>> board, ArrayList<Coordinate> canonicalPositions) {

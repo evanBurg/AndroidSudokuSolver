@@ -1,9 +1,11 @@
-package com.eburg.sudokusolver;
+package com.eburg.sudokusolver.ui;
 
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.eburg.sudokusolver.R;
 
 public class AboutActivity extends AppCompatActivity {
 

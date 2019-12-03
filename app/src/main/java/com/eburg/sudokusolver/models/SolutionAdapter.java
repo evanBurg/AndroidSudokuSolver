@@ -1,4 +1,4 @@
-package com.eburg.sudokusolver;
+package com.eburg.sudokusolver.models;
 
 import android.app.Activity;
 import android.content.Context;
@@ -24,6 +24,9 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.eburg.sudokusolver.R;
+import com.eburg.sudokusolver.database.DBAdapter;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,7 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import static com.eburg.sudokusolver.SolveActivity.getBorder;
+import static com.eburg.sudokusolver.ui.SolveActivity.getBorder;
 
 
 public class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHolder> {

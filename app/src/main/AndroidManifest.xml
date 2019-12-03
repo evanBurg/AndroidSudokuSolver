@@ -12,22 +12,22 @@
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="ocr" />
-        <activity android:name=".ListActivity">
+        <activity android:name=".ui.ListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".ui.MainActivity" />
         </activity>
-        <activity android:name=".SolveActivity">
+        <activity android:name=".ui.SolveActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".ui.MainActivity" />
         </activity>
-        <activity android:name=".AboutActivity">
+        <activity android:name=".ui.AboutActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".ui.MainActivity" />
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

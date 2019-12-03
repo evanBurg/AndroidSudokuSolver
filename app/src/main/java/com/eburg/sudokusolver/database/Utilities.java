@@ -1,4 +1,4 @@
-package com.eburg.sudokusolver;
+package com.eburg.sudokusolver.database;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

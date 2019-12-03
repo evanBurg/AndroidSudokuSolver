@@ -2,12 +2,14 @@ package com.eburg.sudokusolver.ui;
 
 import android.animation.LayoutTransition;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -53,6 +55,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 import static android.graphics.Color.argb;
 
@@ -286,7 +289,7 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
         }
     }
 
-    public void solvePuzzle(View v){
+    public void solvePuzzle(View v) throws ExecutionException, InterruptedException {
         ArrayList<ArrayList<Integer>> unsolved = new ArrayList<>();
         for(int i = 0; i < BOARD_END; i++){
             ArrayList<EditText> row = inputBoard.get(i);
@@ -305,36 +308,8 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
 
         //Send to solve function
         Solution solution = new Solution(0, unsolved, unsolved, IMAGE_URI);
-        solution = StochasticOptimizationSolver.solve(solution);
-
-        //Show solved cells as light grey
-        for(int i = 0; i < BOARD_END; i++){
-            ArrayList<EditText> inputRow = inputBoard.get(i);
-            ArrayList<Integer> numRow = solution.getSolution().get(i);
-            for(int j = 0; j < BOARD_END; j++){
-                EditText text = inputRow.get(j);
-                Integer num = numRow.get(j);
-                try{
-                    text.setText(String.valueOf(num));
-                    if(unsolved.get(i).get(j) == 0){
-                        text.setTextColor(Color.LTGRAY);
-                    }
-                }catch (Exception e){
-                    String what = e.getMessage();
-                    String className = e.toString();
-                }
-            }
-        }
-
-        //Insert solution into database
-        db.insertSolution(solution);
-        Context context = getApplicationContext();
-        CharSequence text = "Solution Saved!";
-        int duration = Toast.LENGTH_SHORT;
-
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
-        solveButton.setEnabled(false);
+        AsyncTaskRunner runner = new AsyncTaskRunner(solution);
+        runner.execute();
     }
 
     @Override
@@ -378,6 +353,82 @@ public class SolveActivity extends AppCompatActivity implements DBAdapter.Listen
         } catch (Exception e) {
             String what = e.getMessage();
             return false;
+        }
+    }
+
+    private class AsyncTaskRunner extends AsyncTask<String, String, String> {
+
+        public Solution solution;
+        ProgressDialog progressDialog;
+
+        public AsyncTaskRunner(Solution solution){
+            this.solution = solution;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            publishProgress("Solving...");
+            try {
+                this.solution = StochasticOptimizationSolver.solve(this.solution);
+                publishProgress("Solved");
+            } catch (Exception e) {
+                e.printStackTrace();
+                publishProgress("Failed");
+                return "failure";
+            }
+            return "success";
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            // execution of result of Long time consuming operation
+
+            //Show solved cells as light grey
+            ArrayList<ArrayList<Integer>> solved = solution.getSolution();
+            ArrayList<ArrayList<Integer>> unsolved = solution.getProblem();
+            for(int i = 0; i < BOARD_END; i++){
+                ArrayList<EditText> inputRow = inputBoard.get(i);
+                ArrayList<Integer> numRow = solved.get(i);
+                for(int j = 0; j < BOARD_END; j++){
+                    EditText text = inputRow.get(j);
+                    Integer num = numRow.get(j);
+                    try{
+                        text.setText(String.valueOf(num));
+                        if(unsolved.get(i).get(j) == 0){
+                            text.setTextColor(Color.LTGRAY);
+                        }
+                    }catch (Exception e){
+                        String what = e.getMessage();
+                        String className = e.toString();
+                    }
+                }
+            }
+
+            //Insert solution into database
+            db.insertSolution(solution);
+            Context context = getApplicationContext();
+            CharSequence text = "Solution Saved!";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            solveButton.setEnabled(false);
+            progressDialog.dismiss();
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(SolveActivity.this,
+                    "Solving",
+                    "Please wait while we solve your puzzle...");
+        }
+
+
+        @Override
+        protected void onProgressUpdate(String... text) {
+
         }
     }
 }

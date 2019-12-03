@@ -1,11 +1,7 @@
 package com.eburg.sudokusolver.models;
 
 import android.graphics.Rect;
-
-import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
-
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
